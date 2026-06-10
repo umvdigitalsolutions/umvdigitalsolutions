@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title">
+  <title id="title">UMV Legal Associates</title>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="62%" r="65%">
+      <stop offset="0%" stop-color="#4f83b8"/>
+      <stop offset="48%" stop-color="#26303a"/>
+      <stop offset="100%" stop-color="#050607"/>
+    </radialGradient>
+    <linearGradient id="blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5aa2df"/>
+      <stop offset="100%" stop-color="#1d5d94"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="15" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <g fill="none" stroke="#090909" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" opacity="0.92">
+    <path d="M230 292c102-21 184-91 282-105 100 15 183 84 282 105"/>
+    <path d="M512 36c8 45 3 77-16 112 17 37 22 70 0 112h32c-19-42-14-75 0-112-18-35-23-67-16-112Z" fill="#202020"/>
+    <path d="M230 292v290M794 292v290"/>
+    <path d="M116 582h228L230 292 116 582ZM680 582h228L794 292 680 582Z"/>
+    <path d="M372 608h280c-42-17-77-28-103-48H475c-26 20-61 31-103 48Z" fill="#202020"/>
+  </g>
+  <g filter="url(#glow)">
+    <rect x="116" y="600" width="232" height="232" rx="4" fill="url(#blue)" opacity="0.92"/>
+    <rect x="676" y="600" width="232" height="232" rx="4" fill="url(#blue)" opacity="0.92"/>
+  </g>
+  <text x="232" y="782" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-size="172" fill="#6ea6d4" stroke="#123a5d" stroke-width="2">U</text>
+  <text x="792" y="782" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-size="172" fill="#6ea6d4" stroke="#123a5d" stroke-width="2">V</text>
+  <g fill="#202020" stroke="#050505" stroke-width="7">
+    <path d="M392 834V668l78 36 42 120 42-120 78-36v166h-52v-82l-37 82h-62l-37-82v82Z"/>
+    <path d="M474 640l38 24 38-24-38 92Z" fill="#252525"/>
+    <path d="M493 666h38l-19 66Z" fill="#111"/>
+  </g>
+  <text x="512" y="962" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-size="56" letter-spacing="7" fill="#2c6fa8" stroke="#163c5f" stroke-width="1.5">LEGAL &amp; ASSOCIATES</text>
+</svg>
