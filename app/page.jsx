@@ -8,6 +8,7 @@ import Preloader from "./components/Preloader";
 import ProcessSection from "./components/ProcessSection";
 import TestimonialsSection from "./components/TestimonialsSection";
 import WhySection from "./components/WhySection";
+import WorkCarousel from "./components/WorkCarousel";
 import useLandingAnimations from "./components/useLandingAnimations";
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
       <Preloader />
       <Header />
       <HeroSection />
+      <WorkCarousel />
       <WhySection />
       <ProcessSection />
       <TestimonialsSection />

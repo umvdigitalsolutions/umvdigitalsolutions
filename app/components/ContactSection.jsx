@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Camera, Globe2, Mail, MessageCircle, Send, ShieldCheck, Target, Zap } from "lucide-react";
+import { Camera, Globe2, Mail, MessageCircle, Phone, Send, ShieldCheck, Target, Zap } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 
 const instagramUrl = "https://www.instagram.com/umvdigitals/";
@@ -80,6 +80,9 @@ export default function ContactSection() {
             rel="noreferrer"
           >
             <MessageCircle /> Chat on WhatsApp
+          </a>
+          <a href="tel:+919967276861">
+            <Phone /> +91 99672 76861
           </a>
           <a href={instagramUrl} target="_blank" rel="noreferrer">
             <Camera /> Follow on Instagram

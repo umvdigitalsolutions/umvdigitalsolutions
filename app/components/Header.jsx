@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { BriefcaseBusiness, CircleDollarSign, Home, Layers3, Menu, Phone, Sparkles, X } from "lucide-react";
+import { BriefcaseBusiness, CircleDollarSign, Home, Layers3, Menu, Phone, Sparkles, Users, X } from "lucide-react";
 import Logo from "./Logo";
 
 const navItems = [
@@ -10,6 +10,7 @@ const navItems = [
   ["About", "/about", Sparkles],
   ["Services", "/services", Layers3],
   ["Work", "/work", BriefcaseBusiness],
+  ["Team", "/team", Users],
   ["Pricing", "/pricing", CircleDollarSign],
   ["Contact", "/contact", Phone],
 ];

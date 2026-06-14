@@ -1,4 +1,4 @@
-import { BriefcaseBusiness, Code2, Rocket, Sparkles } from "lucide-react";
+import { BriefcaseBusiness, Code2, MessageCircle, Rocket, Sparkles } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 
 export default function HeroSection() {
@@ -24,6 +24,9 @@ export default function HeroSection() {
           </MagneticButton>
           <MagneticButton href="/work" variant="secondary">
             <BriefcaseBusiness /> View Our Work
+          </MagneticButton>
+          <MagneticButton href="/contact" variant="secondary">
+            <MessageCircle /> Get a Quote
           </MagneticButton>
         </div>
       </div>

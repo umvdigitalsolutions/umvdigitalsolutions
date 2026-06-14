@@ -8,6 +8,22 @@ import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
+function animateHeroIn() {
+  gsap.from(".hero-copy > *", {
+    y: 36,
+    opacity: 0,
+    stagger: 0.12,
+    duration: 0.9,
+    delay: 0.1,
+    ease: "power3.out",
+  });
+
+  const visual = document.querySelector(".visual-panel");
+  if (visual) {
+    gsap.from(visual, { y: 42, rotateX: 10, opacity: 0, duration: 1, delay: 0.22, ease: "power3.out" });
+  }
+}
+
 export default function useLandingAnimations(scopeRef) {
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -27,36 +43,32 @@ export default function useLandingAnimations(scopeRef) {
     };
   }, []);
 
+  useEffect(() => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) return;
+
+    const hasSeenPreloader =
+      window.sessionStorage.getItem("umv-preloader-seen") === "true" ||
+      window.__umvPreloaderHasPlayed === true;
+
+    const preloaderInDom = Boolean(document.querySelector(".preloader"));
+
+    if (!preloaderInDom || hasSeenPreloader) {
+      // Returning visit — animate immediately
+      animateHeroIn();
+      return;
+    }
+
+    // First visit — wait for the video to actually finish
+    const onDone = () => animateHeroIn();
+    window.addEventListener("umv:preloader-done", onDone, { once: true });
+    return () => window.removeEventListener("umv:preloader-done", onDone);
+  }, []);
+
   useGSAP(
     () => {
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (reduceMotion) return;
-
-      const hasSeenPreloader =
-        window.sessionStorage.getItem("umv-preloader-seen") === "true" ||
-        window.__umvPreloaderHasPlayed === true;
-      const shouldPlayLoader = Boolean(document.querySelector(".preloader")) && !hasSeenPreloader;
-      const heroDelay = shouldPlayLoader ? 10.45 : 0.15;
-      const visualDelay = shouldPlayLoader ? 10.6 : 0.28;
-
-      const heroItems = gsap.utils.toArray(".hero-copy > *");
-      const visualPanel = document.querySelector(".visual-panel");
-      const timelineLine = document.querySelector(".timeline-line");
-
-      if (heroItems.length) {
-        gsap.from(heroItems, {
-          y: 36,
-          opacity: 0,
-          stagger: 0.12,
-          duration: 0.9,
-          delay: heroDelay,
-          ease: "power3.out",
-        });
-      }
-
-      if (visualPanel) {
-        gsap.from(visualPanel, { y: 42, rotateX: 10, opacity: 0, duration: 1, delay: visualDelay, ease: "power3.out" });
-      }
 
       gsap.utils.toArray(".reveal").forEach((element) => {
         gsap.from(element, {
@@ -92,6 +104,7 @@ export default function useLandingAnimations(scopeRef) {
         });
       });
 
+      const timelineLine = document.querySelector(".timeline-line");
       if (timelineLine) {
         gsap.from(timelineLine, {
           scaleY: 0,
