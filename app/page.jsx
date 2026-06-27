@@ -368,7 +368,10 @@ export default function Home() {
     const root = mainRef.current;
     if (!root) return;
 
-    const reduceMotion = false;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobileMotion =
+      window.matchMedia("(max-width: 767px)").matches ||
+      window.matchMedia("(pointer: coarse)").matches;
     let typewriterTimer;
 
     /* ── Typewriter for console ── */
@@ -408,113 +411,122 @@ export default function Home() {
           ease: "none",
         });
 
-        /* ── HUD cards entrance ── */
-        gsap.set(".dcc-info-card, .dcc-side-card, .dcc-terminal-card", { opacity: 0, y: 12 });
-        gsap.to(".dcc-info-card, .dcc-side-card, .dcc-terminal-card", {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          stagger: 0.08,
-          ease: "power3.out",
-          delay: 0.5,
-        });
-
-        /* ── Static node pop-in + gentle bob ── */
-        gsap.set(".dcc-node", { opacity: 0, scale: 0.5 });
-        gsap.to(".dcc-node", {
-          opacity: 1,
-          scale: 1,
-          duration: 0.5,
-          stagger: 0.08,
-          ease: "back.out(1.7)",
-          delay: 0.7,
-        });
-        gsap.to(".dcc-node-inner", {
-          y: "+=7",
-          duration: 3,
-          repeat: -1,
-          yoyo: true,
-          stagger: { each: 0.4, from: "random" },
-          ease: "sine.inOut",
-        });
-
-        /* ── Connector flow + data packets ── */
-        gsap.to(".dcc-link", {
-          strokeDashoffset: -14,
-          duration: 0.9,
-          repeat: -1,
-          ease: "none",
-        });
-        gsap.utils.toArray(".dcc-packet").forEach((packet) => {
-          const i = packet.dataset.link;
-          gsap.set(packet, { opacity: 0.9 });
-          gsap.to(packet, {
-            motionPath: {
-              path: `#dcc-link-${i}`,
-              align: `#dcc-link-${i}`,
-              alignOrigin: [0.5, 0.5],
-            },
-            duration: 2.4 + Number(i) * 0.18,
-            repeat: -1,
-            ease: "none",
-            delay: Number(i) * 0.35,
-          });
-        });
-
-        /* ── Sparklines draw in ── */
-        gsap.from(".dcc-spark-line", {
-          drawSVG: 0,
-          duration: 1.2,
-          ease: "power2.out",
-          stagger: 0.25,
-          delay: 1,
-        });
-
-        /* ── Terminal boot sequence ── */
-        gsap.set(".dcc-boot", { opacity: 0, x: -8 });
-        gsap.to(".dcc-boot", {
+        gsap.set(".dcc-info-card, .dcc-side-card, .dcc-terminal-card, .dcc-node, .dcc-boot", {
           opacity: 1,
           x: 0,
-          duration: 0.32,
-          stagger: 0.22,
-          ease: "power2.out",
-          delay: 0.9,
+          y: 0,
+          scale: 1,
         });
 
-        /* ── Scan sweep + core pulse ── */
-        gsap.to(".dcc-scan", { yPercent: 125, duration: 2.1, repeat: -1, ease: "none" });
-        gsap.to(".dcc-core", { scale: 1.09, duration: 1.35, repeat: -1, yoyo: true, ease: "sine.inOut" });
-        gsap.to(".dcc-core-center", { scale: 1.42, opacity: 0.62, duration: 0.9, repeat: -1, yoyo: true, ease: "sine.inOut" });
-        gsap.to(".dcc-core-glow", { scale: 1.18, opacity: 0.72, duration: 1.6, repeat: -1, yoyo: true, ease: "sine.inOut" });
+        if (!isMobileMotion) {
+          /* ── HUD cards entrance ── */
+          gsap.set(".dcc-info-card, .dcc-side-card, .dcc-terminal-card", { opacity: 0, y: 12 });
+          gsap.to(".dcc-info-card, .dcc-side-card, .dcc-terminal-card", {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.08,
+            ease: "power3.out",
+            delay: 0.5,
+          });
 
-        /* ── Rings + arcs + radar ── */
-        gsap.to(".dcc-ring--outer", { rotate: 360, duration: 40, repeat: -1, ease: "none" });
-        gsap.to(".dcc-ring--mid", { rotate: -360, duration: 32, repeat: -1, ease: "none" });
-        gsap.to(".dcc-ring--inner", { rotate: 360, duration: 24, repeat: -1, ease: "none" });
-        gsap.to(".dcc-arc--one", { rotate: 360, duration: 15, repeat: -1, ease: "none" });
-        gsap.to(".dcc-arc--two", { rotate: -360, duration: 18, repeat: -1, ease: "none" });
-        gsap.to(".dcc-arc--three", { rotate: 360, duration: 22, repeat: -1, ease: "none" });
-        gsap.to(".dcc-radar", { rotate: 360, duration: 2.8, repeat: -1, ease: "none" });
-        gsap.to(".dcc-crosshair", { rotate: -360, duration: 70, repeat: -1, ease: "none" });
+          /* ── Static node pop-in + gentle bob ── */
+          gsap.set(".dcc-node", { opacity: 0, scale: 0.5 });
+          gsap.to(".dcc-node", {
+            opacity: 1,
+            scale: 1,
+            duration: 0.5,
+            stagger: 0.08,
+            ease: "back.out(1.7)",
+            delay: 0.7,
+          });
+          gsap.to(".dcc-node-inner", {
+            y: "+=7",
+            duration: 3,
+            repeat: -1,
+            yoyo: true,
+            stagger: { each: 0.4, from: "random" },
+            ease: "sine.inOut",
+          });
 
-        /* ── Data-stream bars ── */
-        gsap.to(".dcc-bar-chart i", {
-          scaleY: 0.38,
-          transformOrigin: "bottom center",
-          duration: 0.65,
-          repeat: -1,
-          yoyo: true,
-          stagger: { each: 0.07, repeat: -1, yoyo: true },
-          ease: "sine.inOut",
-        });
+          /* ── Connector flow + data packets ── */
+          gsap.to(".dcc-link", {
+            strokeDashoffset: -14,
+            duration: 0.9,
+            repeat: -1,
+            ease: "none",
+          });
+          gsap.utils.toArray(".dcc-packet").forEach((packet) => {
+            const i = packet.dataset.link;
+            gsap.set(packet, { opacity: 0.9 });
+            gsap.to(packet, {
+              motionPath: {
+                path: `#dcc-link-${i}`,
+                align: `#dcc-link-${i}`,
+                alignOrigin: [0.5, 0.5],
+              },
+              duration: 2.4 + Number(i) * 0.18,
+              repeat: -1,
+              ease: "none",
+              delay: Number(i) * 0.35,
+            });
+          });
 
-        /* ── Background grid drift ── */
-        gsap.to(".dcc-grid", {
-          backgroundPosition: "34px 34px, 34px 34px, 112px 112px, 0 0",
-          duration: 5,
-          repeat: -1,
-          ease: "none",
-        });
+          /* ── Sparklines draw in ── */
+          gsap.from(".dcc-spark-line", {
+            drawSVG: 0,
+            duration: 1.2,
+            ease: "power2.out",
+            stagger: 0.25,
+            delay: 1,
+          });
+
+          /* ── Terminal boot sequence ── */
+          gsap.set(".dcc-boot", { opacity: 0, x: -8 });
+          gsap.to(".dcc-boot", {
+            opacity: 1,
+            x: 0,
+            duration: 0.32,
+            stagger: 0.22,
+            ease: "power2.out",
+            delay: 0.9,
+          });
+
+          /* ── Scan sweep + core pulse ── */
+          gsap.to(".dcc-scan", { yPercent: 125, duration: 2.1, repeat: -1, ease: "none" });
+          gsap.to(".dcc-core", { scale: 1.09, duration: 1.35, repeat: -1, yoyo: true, ease: "sine.inOut" });
+          gsap.to(".dcc-core-center", { scale: 1.42, opacity: 0.62, duration: 0.9, repeat: -1, yoyo: true, ease: "sine.inOut" });
+          gsap.to(".dcc-core-glow", { scale: 1.18, opacity: 0.72, duration: 1.6, repeat: -1, yoyo: true, ease: "sine.inOut" });
+
+          /* ── Rings + arcs + radar ── */
+          gsap.to(".dcc-ring--outer", { rotate: 360, duration: 40, repeat: -1, ease: "none" });
+          gsap.to(".dcc-ring--mid", { rotate: -360, duration: 32, repeat: -1, ease: "none" });
+          gsap.to(".dcc-ring--inner", { rotate: 360, duration: 24, repeat: -1, ease: "none" });
+          gsap.to(".dcc-arc--one", { rotate: 360, duration: 15, repeat: -1, ease: "none" });
+          gsap.to(".dcc-arc--two", { rotate: -360, duration: 18, repeat: -1, ease: "none" });
+          gsap.to(".dcc-arc--three", { rotate: 360, duration: 22, repeat: -1, ease: "none" });
+          gsap.to(".dcc-radar", { rotate: 360, duration: 2.8, repeat: -1, ease: "none" });
+          gsap.to(".dcc-crosshair", { rotate: -360, duration: 70, repeat: -1, ease: "none" });
+
+          /* ── Data-stream bars ── */
+          gsap.to(".dcc-bar-chart i", {
+            scaleY: 0.38,
+            transformOrigin: "bottom center",
+            duration: 0.65,
+            repeat: -1,
+            yoyo: true,
+            stagger: { each: 0.07, repeat: -1, yoyo: true },
+            ease: "sine.inOut",
+          });
+
+          /* ── Background grid drift ── */
+          gsap.to(".dcc-grid", {
+            backgroundPosition: "34px 34px, 34px 34px, 112px 112px, 0 0",
+            duration: 5,
+            repeat: -1,
+            ease: "none",
+          });
+        }
 
         /* ── Generic section reveals ── */
         gsap.utils.toArray(".empire-reveal").forEach((item) => {
@@ -630,16 +642,20 @@ export default function Home() {
       root.style.setProperty("--cursor-y", `${e.clientY}px`);
     };
 
-    root.addEventListener("mousemove", onMove);
-    root.addEventListener("mouseleave", onLeave);
-    window.addEventListener("pointermove", onPointer);
+    if (!isMobileMotion) {
+      root.addEventListener("mousemove", onMove);
+      root.addEventListener("mouseleave", onLeave);
+      window.addEventListener("pointermove", onPointer);
+    }
 
     return () => {
       if (typewriterTimer) clearTimeout(typewriterTimer);
       context.revert();
-      root.removeEventListener("mousemove", onMove);
-      root.removeEventListener("mouseleave", onLeave);
-      window.removeEventListener("pointermove", onPointer);
+      if (!isMobileMotion) {
+        root.removeEventListener("mousemove", onMove);
+        root.removeEventListener("mouseleave", onLeave);
+        window.removeEventListener("pointermove", onPointer);
+      }
     };
   }, []);
 

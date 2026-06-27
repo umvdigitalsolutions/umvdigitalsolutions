@@ -23,7 +23,14 @@ export default function Header() {
     <header className="site-header">
       <div className="mobile-header-pill">
         <Logo />
-        <button className="menu-button" onClick={() => setMenuOpen((value) => !value)} aria-label="Toggle menu">
+        <button
+          className="menu-button"
+          type="button"
+          onClick={() => setMenuOpen((value) => !value)}
+          aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
+        >
           {menuOpen ? <X /> : <Menu />}
         </button>
       </div>
@@ -43,7 +50,7 @@ export default function Header() {
         })}
       </nav>
 
-      <nav className={`mobile-menu ${menuOpen ? "open" : ""}`} aria-label="Mobile navigation">
+      <nav id="mobile-menu" className={`mobile-menu ${menuOpen ? "open" : ""}`} aria-label="Mobile navigation">
         {navItems.map(([label, href, Icon]) => {
           const active = pathname === href;
           return (
