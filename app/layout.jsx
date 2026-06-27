@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import Preloader from "./components/Preloader";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -43,7 +44,10 @@ export default function RootLayout({ children }) {
       data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Preloader />
+        {children}
+      </body>
     </html>
   );
 }

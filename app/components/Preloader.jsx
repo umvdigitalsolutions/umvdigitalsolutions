@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 const PRELOADER_KEY = "umv-preloader-seen";
-const FALLBACK_DURATION = 60000; // emergency only — video onEnded is the real trigger
+const FALLBACK_DURATION = 7000; // safety only — video onEnded is the real trigger
 const EXIT_DURATION = 850;
 
 function dispatchDone() {
@@ -22,23 +22,28 @@ export default function Preloader() {
       window.__umvPreloaderIsPlaying === true;
 
     if (hasSeenPreloader) {
-      setIsHidden(true);
+      dispatchDone();
       return;
     }
 
-    window.sessionStorage.setItem(PRELOADER_KEY, "true");
     window.__umvPreloaderIsPlaying = true;
-    setIsVisible(true);
+    const showTimer = window.setTimeout(() => {
+      setIsVisible(true);
+    }, 0);
 
     const fallbackTimer = window.setTimeout(() => {
       setIsLeaving(true);
     }, FALLBACK_DURATION);
 
-    return () => window.clearTimeout(fallbackTimer);
+    return () => {
+      window.clearTimeout(showTimer);
+      window.clearTimeout(fallbackTimer);
+    };
   }, []);
 
   useEffect(() => {
     if (!isLeaving) return;
+    window.sessionStorage.setItem(PRELOADER_KEY, "true");
     window.__umvPreloaderHasPlayed = true;
     window.__umvPreloaderIsPlaying = false;
     dispatchDone();
