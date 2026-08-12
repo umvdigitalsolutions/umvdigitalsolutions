@@ -10,7 +10,7 @@ const SERVICES = serviceEntries.map(([title]) => title);
 const GESTURE_GUIDE = [
   ["Pinch", "Zoom / spin", ZoomIn],
   ["Open palm", "Wake services", Hand],
-  ["Grab", "Hold orb", HandGrab],
+  ["Holo hold", "Grip orb", HandGrab],
   ["Fist", "Pause orb", Pause],
   ["Swipe", "Rotate services", MoveHorizontal],
   ["Two hands", "Show all", Expand],
