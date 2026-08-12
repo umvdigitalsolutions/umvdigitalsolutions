@@ -7204,7 +7204,11 @@ button {
 
 .jarvis-orb.scroll-driven .orb-root {
   cursor: default;
-  touch-action: pan-y;
+  touch-action: none;
+}
+
+.jarvis-orb.scroll-driven.is-orb-dragging .orb-root {
+  cursor: grabbing;
 }
 
 .jarvis-orb .orb-root canvas {

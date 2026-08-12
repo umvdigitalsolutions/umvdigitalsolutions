@@ -15,8 +15,19 @@ export default function JarvisOrb({ scrollDriven = false }) {
   const overlayRef = useRef(null);
   const sceneRef = useRef(null);
   const trackerRef = useRef(null);
+  const dragRef = useRef({
+    pointerId: null,
+    active: false,
+    lastX: 0,
+    lastY: 0,
+    startX: 0,
+    startY: 0,
+    scrolling: false,
+    holdTimer: 0,
+  });
 
   const [camera, setCamera] = useState("off");
+  const [dragging, setDragging] = useState(false);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -74,6 +85,17 @@ export default function JarvisOrb({ scrollDriven = false }) {
     setCamera("off");
   }, []);
 
+  const scrollAfterOrb = useCallback(() => {
+    const section = orbRef.current?.closest(".services-orb-section");
+    const nextSection = section?.nextElementSibling;
+    if (nextSection instanceof HTMLElement) {
+      nextSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    window.scrollBy({ top: window.innerHeight, behavior: "smooth" });
+  }, []);
+
   const startGestures = useCallback(async () => {
     const video = videoRef.current;
     const overlay = overlayRef.current;
@@ -84,6 +106,12 @@ export default function JarvisOrb({ scrollDriven = false }) {
     const tracker = new HandTracker(video, overlay, {
       onRotate: (dt, dp) => sceneRef.current?.rotateBy(dt, dp),
       onZoom: (factor) => sceneRef.current?.zoomBy(factor),
+      onWake: () => sceneRef.current?.wake(),
+      onPause: (paused) => sceneRef.current?.setPaused(paused),
+      onSwipe: (direction) => sceneRef.current?.rotateBy(direction === "right" ? -0.85 : 0.85, 0),
+      onPoint: (point) => sceneRef.current?.highlightAt(point.x, point.y),
+      onExpand: () => sceneRef.current?.showAllServices(),
+      onThumbsUp: scrollAfterOrb,
       onStatus: () => {},
     });
     trackerRef.current = tracker;
@@ -97,7 +125,124 @@ export default function JarvisOrb({ scrollDriven = false }) {
       setCamera("off");
       console.warn("Hand tracking failed to start", err);
     }
+  }, [scrollAfterOrb]);
+
+  const clearHoldTimer = useCallback(() => {
+    if (dragRef.current.holdTimer) {
+      window.clearTimeout(dragRef.current.holdTimer);
+      dragRef.current.holdTimer = 0;
+    }
   }, []);
+
+  const startOrbDrag = useCallback((pointerId) => {
+    const root = containerRef.current;
+    dragRef.current.active = true;
+    setDragging(true);
+    try {
+      root?.setPointerCapture(pointerId);
+    } catch {
+      // Pointer capture is best-effort; drag still works if the browser refuses it.
+    }
+  }, []);
+
+  const endOrbDrag = useCallback(
+    (event) => {
+      const state = dragRef.current;
+      if (state.pointerId !== event.pointerId) return;
+
+      clearHoldTimer();
+      try {
+        containerRef.current?.releasePointerCapture(event.pointerId);
+      } catch {
+        // Capture may already be released after a native touch scroll.
+      }
+
+      dragRef.current = {
+        pointerId: null,
+        active: false,
+        lastX: 0,
+        lastY: 0,
+        startX: 0,
+        startY: 0,
+        scrolling: false,
+        holdTimer: 0,
+      };
+      setDragging(false);
+    },
+    [clearHoldTimer],
+  );
+
+  const handleOrbPointerDown = useCallback(
+    (event) => {
+      if (!scrollDriven) return;
+      if (event.button !== undefined && event.button !== 0) return;
+
+      clearHoldTimer();
+      const state = dragRef.current;
+      state.pointerId = event.pointerId;
+      state.active = event.pointerType === "mouse";
+      state.startX = event.clientX;
+      state.startY = event.clientY;
+      state.lastX = event.clientX;
+      state.lastY = event.clientY;
+      state.scrolling = false;
+
+      if (state.active) {
+        startOrbDrag(event.pointerId);
+        return;
+      }
+
+      state.holdTimer = window.setTimeout(() => {
+        if (dragRef.current.pointerId === event.pointerId) {
+          startOrbDrag(event.pointerId);
+        }
+      }, 180);
+    },
+    [clearHoldTimer, scrollDriven, startOrbDrag],
+  );
+
+  const handleOrbPointerMove = useCallback(
+    (event) => {
+      const state = dragRef.current;
+      if (state.pointerId !== event.pointerId) return;
+
+      const totalX = event.clientX - state.startX;
+      const totalY = event.clientY - state.startY;
+
+      if (!state.active) {
+        const absX = Math.abs(totalX);
+        const absY = Math.abs(totalY);
+
+        if (event.pointerType === "touch" && scrollDriven && (state.scrolling || (absY > 9 && absY > absX * 1.15))) {
+          clearHoldTimer();
+          state.scrolling = true;
+          event.preventDefault();
+          window.scrollBy(0, state.lastY - event.clientY);
+          state.lastX = event.clientX;
+          state.lastY = event.clientY;
+          return;
+        }
+
+        if (absX > 9 && absX > absY * 1.05) {
+          clearHoldTimer();
+          startOrbDrag(event.pointerId);
+        } else {
+          return;
+        }
+      }
+
+      event.preventDefault();
+      const dx = event.clientX - state.lastX;
+      const dy = event.clientY - state.lastY;
+      state.lastX = event.clientX;
+      state.lastY = event.clientY;
+
+      if (Math.abs(dx) > 0 || Math.abs(dy) > 0) {
+        sceneRef.current?.rotateBy(dx * 0.007, dy * 0.007);
+      }
+    },
+    [clearHoldTimer, scrollDriven, startOrbDrag],
+  );
 
   const toggleGestures = useCallback(() => {
     if (trackerRef.current) stopGestures();
@@ -132,8 +277,20 @@ export default function JarvisOrb({ scrollDriven = false }) {
   const cameraOn = camera === "on";
 
   return (
-    <div ref={orbRef} className={`jarvis-orb${scrollDriven ? " scroll-driven" : ""}`} aria-label="Interactive Ultron hero orb">
-      <div ref={containerRef} className="orb-root" />
+    <div
+      ref={orbRef}
+      className={`jarvis-orb${scrollDriven ? " scroll-driven" : ""}${dragging ? " is-orb-dragging" : ""}`}
+      aria-label="Interactive Ultron hero orb"
+    >
+      <div
+        ref={containerRef}
+        className="orb-root"
+        onPointerDown={handleOrbPointerDown}
+        onPointerMove={handleOrbPointerMove}
+        onPointerUp={endOrbDrag}
+        onPointerCancel={endOrbDrag}
+        onLostPointerCapture={endOrbDrag}
+      />
 
       <div className="overlay-vignette" />
       <div className="overlay-grain" />
