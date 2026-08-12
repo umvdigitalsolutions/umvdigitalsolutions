@@ -51,6 +51,7 @@ export default function JarvisOrb({ scrollDriven = false }) {
       requestScrollUpdate();
       window.addEventListener("scroll", requestScrollUpdate, { passive: true });
       window.addEventListener("resize", requestScrollUpdate);
+      window.visualViewport?.addEventListener("resize", requestScrollUpdate);
     }
 
     return () => {
@@ -58,6 +59,7 @@ export default function JarvisOrb({ scrollDriven = false }) {
       if (scrollDriven) {
         window.removeEventListener("scroll", requestScrollUpdate);
         window.removeEventListener("resize", requestScrollUpdate);
+        window.visualViewport?.removeEventListener("resize", requestScrollUpdate);
       }
       trackerRef.current?.stop();
       trackerRef.current = null;
