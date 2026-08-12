@@ -7328,6 +7328,72 @@ button {
   display: block;
 }
 
+.jarvis-orb .gesture-guide {
+  position: absolute;
+  right: 244px;
+  bottom: 24px;
+  z-index: 20;
+  display: block;
+  width: min(20rem, calc(100% - 19rem));
+  max-width: 22rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(90, 242, 255, 0.48);
+  border-radius: 6px;
+  background: rgba(1, 8, 20, 0.82);
+  box-shadow:
+    0 0 22px rgba(40, 180, 255, 0.24),
+    0 0 22px rgba(90, 242, 255, 0.12) inset;
+  backdrop-filter: blur(4px);
+}
+
+.jarvis-orb .gesture-guide-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.58rem;
+  color: #d2fcff;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(90, 242, 255, 0.5);
+}
+
+.jarvis-orb .gesture-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.jarvis-orb .gesture-guide-item {
+  display: grid;
+  grid-template-columns: 1.05rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  color: #5af2ff;
+}
+
+.jarvis-orb .gesture-guide-item span {
+  display: grid;
+  gap: 0.06rem;
+  min-width: 0;
+}
+
+.jarvis-orb .gesture-guide-item strong {
+  color: #d2fcff;
+  font-size: 0.62rem;
+  line-height: 1.05;
+  white-space: nowrap;
+}
+
+.jarvis-orb .gesture-guide-item small {
+  color: rgba(156, 235, 255, 0.82);
+  font-size: 0.56rem;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
 .jarvis-orb .camera-video {
   position: absolute;
   inset: 0;
@@ -7383,6 +7449,42 @@ button {
     bottom: 4.15rem;
     width: min(12rem, calc(100vw - 5rem));
     height: 8rem;
+  }
+
+  .jarvis-orb .gesture-guide {
+    right: 0.85rem;
+    bottom: 4.15rem;
+    width: min(18rem, calc(100vw - 1.7rem));
+    max-width: none;
+    padding: 0.54rem;
+  }
+
+  .jarvis-orb.gestures-active .gesture-guide {
+    bottom: 12.65rem;
+  }
+
+  .jarvis-orb .gesture-guide-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.35rem;
+  }
+
+  .jarvis-orb .gesture-guide-item {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 0.24rem;
+    text-align: center;
+  }
+
+  .jarvis-orb .gesture-guide-item span {
+    gap: 0.04rem;
+  }
+
+  .jarvis-orb .gesture-guide-item strong {
+    font-size: 0.56rem;
+  }
+
+  .jarvis-orb .gesture-guide-item small {
+    font-size: 0.5rem;
   }
 
   .jarvis-orb .gesture-toggle {

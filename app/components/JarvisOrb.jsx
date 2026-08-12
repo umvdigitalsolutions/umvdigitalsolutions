@@ -1,12 +1,22 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Hand } from "lucide-react";
+import { BadgeQuestionMark, Expand, Hand, MousePointer2, MoveHorizontal, Pause, Rotate3D, ThumbsUp, ZoomIn } from "lucide-react";
 import { createOrbScene } from "@/lib/orbScene";
 import { HandTracker } from "@/lib/handTracker";
 import { services as serviceEntries } from "./siteData";
 
 const SERVICES = serviceEntries.map(([title]) => title);
+const GESTURE_GUIDE = [
+  ["Pinch", "Zoom / spin", ZoomIn],
+  ["Open palm", "Wake services", Hand],
+  ["Fist", "Pause orb", Pause],
+  ["Swipe", "Rotate services", MoveHorizontal],
+  ["Point", "Highlight one", MousePointer2],
+  ["Two hands", "Show all", Expand],
+  ["Thumbs up", "Next section", ThumbsUp],
+  ["Hold + drag", "Rotate orb", Rotate3D],
+];
 
 export default function JarvisOrb({ scrollDriven = false }) {
   const orbRef = useRef(null);
@@ -279,7 +289,7 @@ export default function JarvisOrb({ scrollDriven = false }) {
   return (
     <div
       ref={orbRef}
-      className={`jarvis-orb${scrollDriven ? " scroll-driven" : ""}${dragging ? " is-orb-dragging" : ""}`}
+      className={`jarvis-orb${scrollDriven ? " scroll-driven" : ""}${dragging ? " is-orb-dragging" : ""}${cameraOn ? " gestures-active" : ""}`}
       aria-label="Interactive Ultron hero orb"
     >
       <div
@@ -311,6 +321,24 @@ export default function JarvisOrb({ scrollDriven = false }) {
       <div className={`gesture-camera-panel${cameraOn ? " visible" : ""}`} aria-hidden={!cameraOn}>
         <video ref={videoRef} muted playsInline className="camera-video" />
         <canvas ref={overlayRef} width={208} height={156} className="camera-overlay" />
+      </div>
+
+      <div className="gesture-guide">
+        <div className="gesture-guide-title">
+          <BadgeQuestionMark size={15} aria-hidden="true" />
+          <span>Gesture Guide</span>
+        </div>
+        <div className="gesture-guide-grid">
+          {GESTURE_GUIDE.map(([gesture, action, Icon]) => (
+            <div className="gesture-guide-item" key={gesture}>
+              <Icon size={14} aria-hidden="true" />
+              <span>
+                <strong>{gesture}</strong>
+                <small>{action}</small>
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
