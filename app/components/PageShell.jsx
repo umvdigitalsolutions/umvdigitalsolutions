@@ -10,7 +10,7 @@ import Header from "./Header";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-export default function PageShell({ children }) {
+export default function PageShell({ children, className = "" }) {
   const shellRef = useRef(null);
   const pathname = usePathname();
 
@@ -20,7 +20,7 @@ export default function PageShell({ children }) {
 
       const isWorkPage = pathname === "/work";
       const introTargets = gsap.utils.toArray(
-        ".route-shell .section > *:not(.cc-grid):not(.work-toolbar):not(.wg-cta)",
+        ".route-shell .section > *:not(.cc-grid):not(.work-toolbar):not(.wg-cta):not(.services-page-orb)",
         shellRef.current,
       );
 
@@ -50,7 +50,7 @@ export default function PageShell({ children }) {
   );
 
   return (
-    <main ref={shellRef} className="site-shell route-shell">
+    <main ref={shellRef} className={`site-shell route-shell${className ? ` ${className}` : ""}`}>
       <Header />
       {children}
       <Footer />

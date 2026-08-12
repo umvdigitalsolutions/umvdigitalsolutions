@@ -70,8 +70,21 @@ button {
   padding-top: 5.5rem;
 }
 
+.route-shell.services-route {
+  overflow: visible;
+  padding-top: 0;
+}
+
 .route-shell .section:first-of-type {
   padding-top: clamp(3.2rem, 6vw, 5rem);
+}
+
+.route-shell.services-route .section:first-of-type {
+  padding-top: 0;
+}
+
+.services-route #services {
+  padding-top: clamp(6rem, 9vw, 8rem);
 }
 
 .about-detail {
@@ -3585,7 +3598,7 @@ html,
 body {
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 img,
@@ -7147,5 +7160,275 @@ button {
     font-size: 0.58rem;
     line-height: 1.25;
     overflow-wrap: anywhere;
+  }
+}
+
+/* Jarvis orb hero visual */
+.jarvis-orb-shell {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  display: block;
+  width: clamp(640px, 49vw, 900px);
+  height: clamp(520px, 39vw, 660px);
+  justify-self: end;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #000;
+}
+
+.jarvis-orb {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  overflow: hidden;
+  border: 1px solid rgba(90, 242, 255, 0.3);
+  border-radius: 14px;
+  background: #000;
+  font-family: "Courier New", monospace;
+  isolation: isolate;
+}
+
+.jarvis-orb .orb-root {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: grab;
+  touch-action: none;
+}
+
+.jarvis-orb .orb-root:active {
+  cursor: grabbing;
+}
+
+.jarvis-orb.scroll-driven .orb-root {
+  cursor: default;
+  touch-action: pan-y;
+}
+
+.jarvis-orb .orb-root canvas {
+  display: block;
+}
+
+.jarvis-orb .overlay-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 150px;
+  mix-blend-mode: screen;
+}
+
+.jarvis-orb .overlay-scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 11;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+  opacity: 0.3;
+}
+
+.jarvis-orb .overlay-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+.jarvis-orb .gesture-toggle {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  z-index: 22;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid rgba(90, 242, 255, 0.5);
+  border-radius: 50%;
+  background: rgba(1, 8, 20, 0.7);
+  color: #5af2ff;
+  cursor: pointer;
+  box-shadow:
+    0 0 16px rgba(40, 180, 255, 0.22),
+    0 0 14px rgba(80, 220, 255, 0.14) inset;
+  backdrop-filter: blur(2px);
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    color 160ms ease;
+}
+
+.jarvis-orb .gesture-toggle:hover {
+  transform: translateY(-1px);
+  border-color: rgba(184, 251, 255, 0.9);
+  color: #d2fcff;
+  box-shadow:
+    0 0 22px rgba(80, 220, 255, 0.36),
+    0 0 16px rgba(90, 242, 255, 0.24) inset;
+}
+
+.jarvis-orb .gesture-toggle.active {
+  border-color: rgba(210, 252, 255, 0.96);
+  color: #d2fcff;
+}
+
+.jarvis-orb .gesture-toggle:disabled {
+  cursor: progress;
+  opacity: 0.62;
+}
+
+.jarvis-orb .gesture-toggle-dot {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(38, 158, 255, 0.86);
+  box-shadow: 0 0 8px rgba(38, 158, 255, 0.84);
+}
+
+.jarvis-orb .gesture-toggle.active .gesture-toggle-dot {
+  background: #d2fcff;
+  box-shadow: 0 0 10px rgba(210, 252, 255, 0.95);
+}
+
+.jarvis-orb .gesture-camera-panel {
+  position: absolute;
+  right: 24px;
+  bottom: 78px;
+  z-index: 20;
+  display: none;
+  width: 208px;
+  height: 156px;
+  overflow: hidden;
+  border: 1px solid rgba(90, 242, 255, 0.46);
+  border-radius: 4px;
+  background: #010814;
+  box-shadow: 0 0 16px rgba(40, 180, 255, 0.18);
+}
+
+.jarvis-orb .gesture-camera-panel.visible {
+  display: block;
+}
+
+.jarvis-orb .camera-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  filter: saturate(1.75) brightness(0.72) contrast(1.16) hue-rotate(170deg);
+  transform: scaleX(-1);
+}
+
+.jarvis-orb .camera-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 1320px) and (min-width: 1101px) {
+  .jarvis-orb-shell {
+    width: clamp(560px, 52vw, 760px);
+    height: clamp(500px, 42vw, 600px);
+  }
+}
+
+@media (max-width: 1100px) {
+  .jarvis-orb-shell {
+    grid-column: auto;
+    grid-row: auto;
+    width: min(100%, 760px);
+    height: clamp(500px, 64vw, 580px);
+    justify-self: center;
+    margin-top: clamp(1rem, 3vw, 2rem);
+  }
+}
+
+@media (max-width: 767px) {
+  .jarvis-orb-shell {
+    width: 100% !important;
+    max-width: calc(100vw - 2.5rem) !important;
+    height: min(112vw, 430px);
+    min-height: 390px;
+    margin: 1.7rem auto 0 !important;
+  }
+
+  .jarvis-orb {
+    min-height: 390px;
+    border-radius: 12px;
+  }
+
+  .jarvis-orb .gesture-camera-panel {
+    right: 0.85rem;
+    bottom: 4.15rem;
+    width: min(12rem, calc(100vw - 5rem));
+    height: 8rem;
+  }
+
+  .jarvis-orb .gesture-toggle {
+    right: 0.85rem;
+    bottom: 0.85rem;
+    width: 2.55rem;
+    height: 2.55rem;
+  }
+}
+
+.services-orb-section {
+  --orb-sticky-top: 0rem;
+  --orb-scroll-length: 6.2;
+  display: flex;
+  width: 100vw !important;
+  max-width: none;
+  height: calc((100svh - var(--orb-sticky-top)) * var(--orb-scroll-length));
+  min-height: calc((100svh - var(--orb-sticky-top)) * var(--orb-scroll-length));
+  margin-right: calc(50% - 50vw);
+  margin-left: calc(50% - 50vw);
+  padding: 0 !important;
+}
+
+.services-orb-section .services-page-orb {
+  grid-column: auto;
+  grid-row: auto;
+  position: sticky;
+  top: var(--orb-sticky-top);
+  width: 100vw !important;
+  max-width: none !important;
+  height: calc(100svh - var(--orb-sticky-top));
+  margin: 0 auto;
+  border-radius: 0;
+  justify-self: center;
+}
+
+.services-orb-section .jarvis-orb {
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+@media (max-width: 767px) {
+  .services-orb-section {
+    --orb-scroll-length: 7;
+  }
+
+  .services-orb-section .services-page-orb {
+    height: calc(100svh - var(--orb-sticky-top));
+    min-height: 0;
+    margin: 0 !important;
   }
 }
