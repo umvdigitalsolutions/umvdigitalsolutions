@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { BadgeQuestionMark, Expand, Hand, MousePointer2, MoveHorizontal, Pause, Rotate3D, ThumbsUp, ZoomIn } from "lucide-react";
+import { BadgeQuestionMark, Expand, Hand, HandGrab, MoveHorizontal, Pause, Rotate3D, ThumbsUp, ZoomIn } from "lucide-react";
 import { createOrbScene } from "@/lib/orbScene";
 import { HandTracker } from "@/lib/handTracker";
 import { services as serviceEntries } from "./siteData";
@@ -10,9 +10,9 @@ const SERVICES = serviceEntries.map(([title]) => title);
 const GESTURE_GUIDE = [
   ["Pinch", "Zoom / spin", ZoomIn],
   ["Open palm", "Wake services", Hand],
+  ["Grab", "Hold orb", HandGrab],
   ["Fist", "Pause orb", Pause],
   ["Swipe", "Rotate services", MoveHorizontal],
-  ["Point", "Highlight one", MousePointer2],
   ["Two hands", "Show all", Expand],
   ["Thumbs up", "Next section", ThumbsUp],
   ["Hold + drag", "Rotate orb", Rotate3D],
@@ -119,7 +119,6 @@ export default function JarvisOrb({ scrollDriven = false }) {
       onWake: () => sceneRef.current?.wake(),
       onPause: (paused) => sceneRef.current?.setPaused(paused),
       onSwipe: (direction) => sceneRef.current?.rotateBy(direction === "right" ? -0.85 : 0.85, 0),
-      onPoint: (point) => sceneRef.current?.highlightAt(point.x, point.y),
       onExpand: () => sceneRef.current?.showAllServices(),
       onThumbsUp: scrollAfterOrb,
       onStatus: () => {},
