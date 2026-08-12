@@ -7333,7 +7333,7 @@ button {
   right: 244px;
   bottom: 24px;
   z-index: 20;
-  display: block;
+  display: none;
   width: min(20rem, calc(100% - 19rem));
   max-width: 22rem;
   padding: 0.75rem;
@@ -7344,6 +7344,10 @@ button {
     0 0 22px rgba(40, 180, 255, 0.24),
     0 0 22px rgba(90, 242, 255, 0.12) inset;
   backdrop-filter: blur(4px);
+}
+
+.jarvis-orb.gestures-active .gesture-guide {
+  display: block;
 }
 
 .jarvis-orb .gesture-guide-title {
